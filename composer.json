@@ -1,6 +1,6 @@
 {
-  "name": "staempfli/magento2-module-modulename",
-  "description": "{{Some description here}}",
+  "name": "staempfli/magento2-module-image-resizer",
+  "description": "Magento 2 Module to add simple image resizing capabilities in all blocks and .phtml templates",
   "require": {
     "php": "~7.0.0"
   },
@@ -11,8 +11,8 @@
   ],
   "authors": [
     {
-      "name": "Name Lastname",
-      "email": "name.lastname@staempfli.com"
+      "name": "Juan Alonso",
+      "email": "juan.alonso@staempfli.com"
     }
   ],
   "autoload": {
@@ -20,7 +20,7 @@
       "registration.php"
     ],
     "psr-4": {
-      "Staempfli\\ModuleName\\": ""
+      "Staempfli\\ImageResizer\\": ""
     }
   }
 }

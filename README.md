@@ -1,11 +1,11 @@
-# {{MODULE NAME}}
+# Magento 2 Image Resizer
 
-{{Some description here}}
+Magento 2 Module to add simple image resizing capabilities in all blocks and .phtml templates — Edit
 
 ## Installation
 
 ```
-$ composer require "staempfli/magento2-module-{{modulename}}":"dev-master"
+$ composer require "staempfli/magento2-module-image-resizer":"dev-master"
 ```
 
 ## Prerequisites

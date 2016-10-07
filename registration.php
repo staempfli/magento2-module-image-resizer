@@ -1,6 +1,6 @@
 <?php
 \Magento\Framework\Component\ComponentRegistrar::register(
     \Magento\Framework\Component\ComponentRegistrar::MODULE,
-    'Staempfli_ModuleName',
+    'Staempfli_ImageResizer',
     __DIR__
 );
