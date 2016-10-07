@@ -1,0 +1,26 @@
+{
+  "name": "staempfli/magento2-module-modulename",
+  "description": "{{Some description here}}",
+  "require": {
+    "php": "~7.0.0"
+  },
+  "type": "magento2-module",
+  "license": [
+    "OSL-3.0",
+    "AFL-3.0"
+  ],
+  "authors": [
+    {
+      "name": "Name Lastname",
+      "email": "name.lastname@staempfli.com"
+    }
+  ],
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "Staempfli\\ModuleName\\": ""
+    }
+  }
+}
