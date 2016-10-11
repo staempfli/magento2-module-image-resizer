@@ -54,7 +54,7 @@ class Resizer
      * @var array
      */
     protected $defaultSettings = [
-        'constrainOnly' => true, // Guarantee, that image picture will not be bigger, than it was. It is false by default..
+        'constrainOnly' => true, // Guarantee, that image picture will not be bigger, than it was. It is false by default.
         'keepAspectRatio' => true, // Guarantee, that image picture width/height will not be distorted. It is true by default.
         'keepTransparency' => true, // Guarantee, that image will not lose transparency if any. It is true by default.
         'keepFrame' => false // Guarantee, that image will have dimensions, set in $width/$height. Not applicable, if keepAspectRatio(false).
@@ -214,14 +214,14 @@ class Resizer
     protected function getRelativePathResizedImage()
     {
         $pathInfo = $this->fileIo->getPathInfo($this->relativeFilename);
-        $cacheRelativePathParts = [
+        $relativePathParts = [
             self::IMAGE_RESIZER_DIR,
             DirectoryList::CACHE,
             $pathInfo['dirname'],
             $this->getResizeSubFolderName(),
             $pathInfo['basename']
         ];
-        return implode(DIRECTORY_SEPARATOR, $cacheRelativePathParts);
+        return implode(DIRECTORY_SEPARATOR, $relativePathParts);
 
     }
 
