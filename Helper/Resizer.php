@@ -23,6 +23,10 @@ class Resizer
      */
     const IMAGE_RESIZER_DIR = 'staempfli_imageresizer';
     /**
+     * constant IMAGE_RESIZER_CACHE_DIR
+     */
+    const IMAGE_RESIZER_CACHE_DIR = self::IMAGE_RESIZER_DIR . DIRECTORY_SEPARATOR . DirectoryList::CACHE;
+    /**
      * @var imageAdapterFactory
      */
     protected $imageAdapterFactory;
@@ -91,7 +95,7 @@ class Resizer
         StoreManagerInterface $storeManager,
         File $fileIo,
         LoggerInterface $logger
-    ){
+    ) {
         $this->imageAdapterFactory = $imageAdapterFactory;
         $this->mediaDirectoryRead = $filesystem->getDirectoryRead(DirectoryList::MEDIA);
         $this->storeManager = $storeManager;
@@ -204,6 +208,11 @@ class Resizer
         return $subPath;
     }
 
+    protected function getResizerCacheDir()
+    {
+        return self::IMAGE_RESIZER_DIR . DIRECTORY_SEPARATOR . DirectoryList::CACHE;
+    }
+
     /**
      * Get relative path where the resized image is saved
      *
@@ -215,14 +224,12 @@ class Resizer
     {
         $pathInfo = $this->fileIo->getPathInfo($this->relativeFilename);
         $relativePathParts = [
-            self::IMAGE_RESIZER_DIR,
-            DirectoryList::CACHE,
+            self::IMAGE_RESIZER_CACHE_DIR,
             $pathInfo['dirname'],
             $this->getResizeSubFolderName(),
             $pathInfo['basename']
         ];
         return implode(DIRECTORY_SEPARATOR, $relativePathParts);
-
     }
 
     /**
@@ -279,5 +286,4 @@ class Resizer
         $imageAdapter->save($this->getAbsolutePathResized());
         return true;
     }
-
 }

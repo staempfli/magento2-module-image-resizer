@@ -1,0 +1,17 @@
+<?php
+/**
+ * additional
+ *
+ * @copyright Copyright (c) 2016 Staempfli AG
+ * @author    juan.alonso@staempfli.com
+ */
+?>
+<?php
+/** @var Staempfli\ImageResizer\Block\Cache\Additional $block */
+?>
+<p>
+    <button onclick="setLocation('<?php /* @escapeNotVerified */ echo $block->getCleanResizedImagesUrl() ?>')" type="button">
+        <?php /* @escapeNotVerified */ echo __('Flush Resized Images Cache') ?>
+    </button>
+    <span><?php /* @escapeNotVerified */ echo __('Generated images with ImageResizer module') ?></span>
+</p>
