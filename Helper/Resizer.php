@@ -100,20 +100,20 @@ class Resizer
     }
 
     /**
-     * Get Resized Image Url
-     * - Return received Url if no success
+     * Resized image and return url
+     * - Return original image url if no success
      *
-     * @param $fileUrl
+     * @param $imageUrl
      * @param $width
      * @param $height
      * @param array $resizeSettings
      * @return bool|string
      */
-    public function getResizedImageUrl($fileUrl, $width, $height, array $resizeSettings = [])
+    public function resizeAndGetUrl($imageUrl, $width, $height, array $resizeSettings = [])
     {
         // Set $resultUrl with $fileUrl to return this one in case the resize fails.
-        $resultUrl = $fileUrl;
-        $this->initRelativeFilenameFromUrl($fileUrl);
+        $resultUrl = $imageUrl;
+        $this->initRelativeFilenameFromUrl($imageUrl);
         if (!$this->relativeFilename) {
             return $resultUrl;
         }
@@ -123,14 +123,14 @@ class Resizer
 
         try {
             // Check if resized image already exists in cache
-            $resizedImageUrl = $this->getUrlResizedImage();
-            if (!$resizedImageUrl) {
-                if ($this->createAndSaveResizedImage()) {
-                    $resizedImageUrl = $this->getUrlResizedImage();
+            $resizedUrl = $this->getResizedImageUrl();
+            if (!$resizedUrl) {
+                if ($this->resizeAndSaveImage()) {
+                    $resizedUrl = $this->getResizedImageUrl();
                 }
             }
-            if ($resizedImageUrl) {
-                $resultUrl = $resizedImageUrl;
+            if ($resizedUrl) {
+                $resultUrl = $resizedUrl;
             }
         } catch (\Exception $e) {
             $this->logger->addError("Staempfli_ImageResizer: could not resize image: \n" . $e->getMessage());
@@ -146,9 +146,9 @@ class Resizer
      */
     protected function initResizeSettings(array $resizeSettings)
     {
-        // Init resize Settings with default
+        // Init resize settings with default
         $this->resizeSettings = $this->defaultSettings;
-        // Override resizeSettings only if the key matches with the allowed settings
+        // Override resizeSettings only if key matches with existing settings
         foreach ($resizeSettings as $key => $value) {
             if (array_key_exists($key, $this->resizeSettings)) {
                 $this->resizeSettings[$key] = $value;
@@ -156,24 +156,44 @@ class Resizer
         }
     }
 
-    protected function initRelativeFilenameFromUrl($fileUrl)
+    /**
+     * Init relative filename from original image url to resize
+     *
+     * @param $imageUrl
+     * @return bool|mixed|string
+     */
+    protected function initRelativeFilenameFromUrl($imageUrl)
     {
         $this->relativeFilename = false; // reset filename in case there was another value defined
         $storeUrl = $this->storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_MEDIA);
-        if (false !== strpos($fileUrl, $storeUrl)) {
-            $relativeFilename = str_replace($storeUrl, '', $fileUrl);
+        if (false !== strpos($imageUrl, $storeUrl)) {
+            $relativeFilename = str_replace($storeUrl, '', $imageUrl);
             $this->relativeFilename = $relativeFilename;
         }
         return $this->relativeFilename;
     }
 
+    /**
+     * Init resize dimensions
+     *
+     * @param $width
+     * @param $height
+     */
     protected function initSize($width, $height)
     {
         $this->width = $width;
         $this->height = $height;
     }
 
-    protected function getResizeSubPath()
+    /**
+     * Get sub folder name where the resized image will be saved
+     *
+     * In order to have unique folders depending on setting, we use the following logic:
+     *      - <width>x<height>_[co]_[ar]_[tr]_[fr]
+     *
+     * @return string
+     */
+    protected function getResizeSubFolderName()
     {
         $subPath = $this->width . "x" . $this->height;
         foreach ($this->resizeSettings as $key => $value) {
@@ -184,6 +204,13 @@ class Resizer
         return $subPath;
     }
 
+    /**
+     * Get relative path where the resized image is saved
+     *
+     * In order to have unique paths, we use the original image path plus the ResizeSubFolderName.
+     *
+     * @return string
+     */
     protected function getRelativePathResizedImage()
     {
         $pathInfo = $this->fileIo->getPathInfo($this->relativeFilename);
@@ -191,24 +218,39 @@ class Resizer
             self::IMAGE_RESIZER_DIR,
             DirectoryList::CACHE,
             $pathInfo['dirname'],
-            $this->getResizeSubPath(),
+            $this->getResizeSubFolderName(),
             $pathInfo['basename']
         ];
         return implode(DIRECTORY_SEPARATOR, $cacheRelativePathParts);
 
     }
 
+    /**
+     * Get absolute path from original image
+     *
+     * @return string
+     */
     protected function getAbsolutePathOriginal()
     {
         return $this->mediaDirectoryRead->getAbsolutePath($this->relativeFilename);
     }
 
+    /**
+     * Get absolute path from resized image
+     *
+     * @return string
+     */
     protected function getAbsolutePathResized()
     {
         return $this->mediaDirectoryRead->getAbsolutePath($this->getRelativePathResizedImage());
     }
 
-    protected function getUrlResizedImage()
+    /**
+     * Get url of resized image
+     *
+     * @return bool|string
+     */
+    protected function getResizedImageUrl()
     {
         if ($this->fileIo->fileExists($this->getAbsolutePathResized())) {
             return $this->storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_MEDIA) . $this->getRelativePathResizedImage();
@@ -216,7 +258,12 @@ class Resizer
         return false;
     }
 
-    protected function createAndSaveResizedImage()
+    /**
+     * Resize and save new generated image
+     *
+     * @return bool
+     */
+    protected function resizeAndSaveImage()
     {
         if (!$this->fileIo->fileExists($this->getAbsolutePathOriginal())) {
             return false;
@@ -232,6 +279,5 @@ class Resizer
         $imageAdapter->save($this->getAbsolutePathResized());
         return true;
     }
-
 
 }
