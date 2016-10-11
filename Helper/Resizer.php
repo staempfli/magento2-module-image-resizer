@@ -208,11 +208,6 @@ class Resizer
         return $subPath;
     }
 
-    protected function getResizerCacheDir()
-    {
-        return self::IMAGE_RESIZER_DIR . DIRECTORY_SEPARATOR . DirectoryList::CACHE;
-    }
-
     /**
      * Get relative path where the resized image is saved
      *
@@ -259,8 +254,9 @@ class Resizer
      */
     protected function getResizedImageUrl()
     {
-        if ($this->fileIo->fileExists($this->getAbsolutePathResized())) {
-            return $this->storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_MEDIA) . $this->getRelativePathResizedImage();
+        $relativePath = $this->getRelativePathResizedImage();
+        if ($this->mediaDirectoryRead->isFile($relativePath)) {
+            return $this->storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_MEDIA) . $relativePath;
         }
         return false;
     }
@@ -272,7 +268,7 @@ class Resizer
      */
     protected function resizeAndSaveImage()
     {
-        if (!$this->fileIo->fileExists($this->getAbsolutePathOriginal())) {
+        if (!$this->mediaDirectoryRead->isFile($this->relativeFilename)) {
             return false;
         }
 
