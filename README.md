@@ -10,7 +10,7 @@ $ composer require "staempfli/magento2-module-image-resizer":"~1.0"
 
 ## Usage
 
-`ImageResizerHelper is automatically available in all frontend Blocks. 
+`ImageResizerHelper` is automatically available in all frontend Blocks. 
 You can resize your images just calling a method:
 
 ```php
