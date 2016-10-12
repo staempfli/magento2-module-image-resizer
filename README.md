@@ -14,11 +14,9 @@ $ composer require "staempfli/magento2-module-image-resizer":"~1.0"
 You can resize your images just calling a method:
 
 ```php
-
 /** @var \Staempfli\ImageResizer\Helper\Resizer $resizerHelper */
 $resizerHelper = $block->getImageResizerHelper();
 $resizedImageUrl = $resizerHelper->resizeAndGetUrl(<originalImageUrl>, $width, $height, [$resizeSettings]); 
-
 ```
 
 You can do that directly on the .phtml or in your custom Block.
