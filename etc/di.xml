@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * di.xml
+ *
+ * @copyright Copyright (c) 2016 Staempfli AG
+ * @author    juan.alonso@staempfli.com
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+   <type name="Magento\Framework\View\Layout\Generator\Block">
+      <plugin name="staempfli_imageresizer_layout_generate_block_plugin" type="Staempfli\ImageResizer\Plugin\View\Layout\Generator\Block" />
+   </type>
+</config>

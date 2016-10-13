@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * events
+ *
+ * @copyright Copyright (c) 2016 Staempfli AG
+ * @author    juan.alonso@staempfli.com
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="staempfli_imageresizer_clean_images_cache_after">
+        <observer name="flush_all_pagecache" instance="Magento\PageCache\Observer\InvalidateCache" />
+        <observer name="flush_varnish_pagecache" instance="Magento\CacheInvalidate\Observer\FlushAllCacheObserver"/>
+    </event>
+</config>

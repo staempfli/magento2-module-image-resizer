@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * adminhtml_cache_index.xml
+ *
+ * @copyright Copyright (c) 2016 Staempfli AG
+ * @author    juan.alonso@staempfli.com
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="cache.additional">
+            <block class="Staempfli\ImageResizer\Block\Cache\Additional" name="staempfli_imageresizer.cache.additional" template="Staempfli_ImageResizer::system/cache/additional.phtml"/>
+        </referenceBlock>
+    </body>
+</page>
