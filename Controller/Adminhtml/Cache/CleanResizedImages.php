@@ -10,6 +10,7 @@ namespace Staempfli\ImageResizer\Controller\Adminhtml\Cache;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Controller\Adminhtml\Cache as MagentoAdminCache;
+use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\App\Cache\Frontend\Pool;
 use Magento\Framework\App\Cache\StateInterface;
 use Magento\Framework\App\Cache\TypeListInterface;
@@ -49,9 +50,9 @@ class CleanResizedImages extends MagentoAdminCache
     /**
      * Clean JS/css files cache
      *
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @return Redirect
      */
-    public function execute()
+    public function execute() : Redirect
     {
         try {
             $this->resizerCacheHelper->clearResizedImagesCache();
@@ -63,7 +64,7 @@ class CleanResizedImages extends MagentoAdminCache
             $this->messageManager->addExceptionMessage($e, __('An error occurred while clearing the resized images cache.'));
         }
 
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         return $resultRedirect->setPath('adminhtml/cache');
     }
