@@ -52,7 +52,7 @@ class CleanResizedImages extends MagentoAdminCache
      *
      * @return Redirect
      */
-    public function execute() : Redirect
+    public function execute()
     {
         try {
             $this->resizerCacheHelper->clearResizedImagesCache();

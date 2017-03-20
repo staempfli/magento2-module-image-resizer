@@ -108,12 +108,12 @@ class Resizer
      * - Return original image url if no success
      *
      * @param string $imageUrl
-     * @param int $width
-     * @param int $height
+     * @param null|int $width
+     * @param null|int $height
      * @param array $resizeSettings
      * @return bool|string
      */
-    public function resizeAndGetUrl(string $imageUrl, int $width, int $height, array $resizeSettings = [])
+    public function resizeAndGetUrl(string $imageUrl, $width, $height, array $resizeSettings = [])
     {
         // Set $resultUrl with $fileUrl to return this one in case the resize fails.
         $resultUrl = $imageUrl;
@@ -180,10 +180,10 @@ class Resizer
     /**
      * Init resize dimensions
      *
-     * @param $width
-     * @param $height
+     * @param null|int $width
+     * @param null|int $height
      */
-    protected function initSize(int $width, int $height)
+    protected function initSize($width, $height)
     {
         $this->width = $width;
         $this->height = $height;
@@ -197,7 +197,7 @@ class Resizer
      *
      * @return string
      */
-    protected function getResizeSubFolderName() : string
+    protected function getResizeSubFolderName()
     {
         $subPath = $this->width . "x" . $this->height;
         foreach ($this->resizeSettings as $key => $value) {
@@ -215,7 +215,7 @@ class Resizer
      *
      * @return string
      */
-    protected function getRelativePathResizedImage() : string
+    protected function getRelativePathResizedImage()
     {
         $pathInfo = $this->fileIo->getPathInfo($this->relativeFilename);
         $relativePathParts = [
@@ -232,7 +232,7 @@ class Resizer
      *
      * @return string
      */
-    protected function getAbsolutePathOriginal() : string
+    protected function getAbsolutePathOriginal()
     {
         return $this->mediaDirectoryRead->getAbsolutePath($this->relativeFilename);
     }
@@ -242,7 +242,7 @@ class Resizer
      *
      * @return string
      */
-    protected function getAbsolutePathResized() : string
+    protected function getAbsolutePathResized()
     {
         return $this->mediaDirectoryRead->getAbsolutePath($this->getRelativePathResizedImage());
     }
@@ -266,7 +266,7 @@ class Resizer
      *
      * @return bool
      */
-    protected function resizeAndSaveImage() : bool
+    protected function resizeAndSaveImage()
     {
         if (!$this->mediaDirectoryRead->isFile($this->relativeFilename)) {
             return false;
