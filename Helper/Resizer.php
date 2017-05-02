@@ -170,11 +170,13 @@ class Resizer
     {
         $this->relativeFilename = false; // reset filename in case there was another value defined
         $storeUrl = $this->storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_MEDIA);
-        if (false !== strpos($imageUrl, $storeUrl)) {
-            $relativeFilename = str_replace($storeUrl, '', $imageUrl);
-            $this->relativeFilename = $relativeFilename;
+        $parsedstoreUrl = parse_url($storeUrl);
+        $parsedImageUrl = parse_url($imageUrl);
+
+        if(isset($parsedImageUrl['host'])) {
+            // not relative url, lets take only the path
+            $this->relativeFilename = ltrim($parsedImageUrl['path'], $parsedstoreUrl['path']);
         }
-        return $this->relativeFilename;
     }
 
     /**
