@@ -61,7 +61,8 @@ class Resizer
         'constrainOnly' => true, // Guarantee, that image picture will not be bigger, than it was. It is false by default.
         'keepAspectRatio' => true, // Guarantee, that image picture width/height will not be distorted. It is true by default.
         'keepTransparency' => true, // Guarantee, that image will not lose transparency if any. It is true by default.
-        'keepFrame' => false // Guarantee, that image will have dimensions, set in $width/$height. Not applicable, if keepAspectRatio(false).
+        'keepFrame' => false, // Guarantee, that image will have dimensions, set in $width/$height. Not applicable, if keepAspectRatio(false).
+        'backgroundColor' => array(255,255,255)
     ];
     /**
      * @var array
@@ -70,7 +71,8 @@ class Resizer
         'constrainOnly' => 'co',
         'keepAspectRatio' => 'ar',
         'keepTransparency' => 'tr',
-        'keepFrame' => 'fr'
+        'keepFrame' => 'fr',
+		'backgroundColor' => 'bc'
     ];
     /**
      * @var File
@@ -278,6 +280,7 @@ class Resizer
         $imageAdapter->keepAspectRatio($this->resizeSettings['keepAspectRatio']);
         $imageAdapter->keepTransparency($this->resizeSettings['keepTransparency']);
         $imageAdapter->keepFrame($this->resizeSettings['keepFrame']);
+        $imageAdapter->backgroundColor($this->resizeSettings['backgroundColor']);
         $imageAdapter->resize($this->width, $this->height);
         $imageAdapter->save($this->getAbsolutePathResized());
         return true;
