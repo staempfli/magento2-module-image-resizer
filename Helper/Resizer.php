@@ -56,13 +56,20 @@ class Resizer
     protected $storeManager;
     /**
      * @var array
+     *
+     * - constrainOnly[true]: Guarantee, that image picture will not be bigger, than it was. It is false by default.
+     * - keepAspectRatio[true]: Guarantee, that image picture width/height will not be distorted. It is true by default.
+     * - keepTransparency[true]: Guarantee, that image will not lose transparency if any. It is true by default.
+     * - keepFrame[false]: Guarantee, that image will have dimensions, set in $width/$height. Not applicable,
+     * if keepAspectRatio(false).
+     * - backgroundColor[null]: Default white
      */
     protected $defaultSettings = [
-        'constrainOnly' => true, // Guarantee, that image picture will not be bigger, than it was. It is false by default.
-        'keepAspectRatio' => true, // Guarantee, that image picture width/height will not be distorted. It is true by default.
-        'keepTransparency' => true, // Guarantee, that image will not lose transparency if any. It is true by default.
-        'keepFrame' => false, // Guarantee, that image will have dimensions, set in $width/$height. Not applicable, if keepAspectRatio(false).
-        'backgroundColor' => array(255,255,255)
+        'constrainOnly' => true,
+        'keepAspectRatio' => true,
+        'keepTransparency' => true,
+        'keepFrame' => false,
+        'backgroundColor' => null
     ];
     /**
      * @var array
@@ -72,7 +79,7 @@ class Resizer
         'keepAspectRatio' => 'ar',
         'keepTransparency' => 'tr',
         'keepFrame' => 'fr',
-		'backgroundColor' => 'bc'
+        'backgroundColor' => 'bc',
     ];
     /**
      * @var File
@@ -171,13 +178,12 @@ class Resizer
     protected function initRelativeFilenameFromUrl(string $imageUrl)
     {
         $this->relativeFilename = false; // reset filename in case there was another value defined
-        $storeUrl = $this->storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_MEDIA);
-        $parsedstoreUrl = parse_url($storeUrl);
-        $parsedImageUrl = parse_url($imageUrl);
+        $mediaUrl = $this->storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_MEDIA);
+        $mediaPath = parse_url($mediaUrl, PHP_URL_PATH);
+        $imagePath = parse_url($imageUrl, PHP_URL_PATH);
 
-        if(isset($parsedImageUrl['host'])) {
-            // not relative url, lets take only the path
-            $this->relativeFilename = ltrim($parsedImageUrl['path'], $parsedstoreUrl['path']);
+        if (false !== strpos($imagePath, $mediaPath)) {
+            $this->relativeFilename = str_replace($mediaPath, '', $imagePath);
         }
     }
 
