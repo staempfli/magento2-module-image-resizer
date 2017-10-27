@@ -5,7 +5,7 @@ Magento 2 Module to add simple image resizing capabilities in all blocks and .ph
 ## Installation
 
 ```
-$ composer require "staempfli/magento2-module-image-resizer":"~1.0"
+$ composer require "staempfli/magento2-module-image-resizer":"~2.0"
 ```
 
 ## Usage
