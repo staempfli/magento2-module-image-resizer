@@ -17,18 +17,18 @@ use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\View\Result\PageFactory;
-use Staempfli\ImageResizer\Helper\Cache as ResizerCacheHelper;
+use Staempfli\ImageResizer\Model\Cache as ResizerCache;
 
 class CleanResizedImages extends MagentoAdminCache
 {
     /**
-     * @var ResizerCacheHelper
+     * @var ResizerCache
      */
-    protected $resizerCacheHelper;
+    protected $resizerCache;
 
     /**
      * CleanResizedImages constructor.
-     * @param ResizerCacheHelper $resizerCacheHelper
+     * @param ResizerCache $resizerCache
      * @param Context $context
      * @param TypeListInterface $cacheTypeList
      * @param StateInterface $cacheState
@@ -36,7 +36,7 @@ class CleanResizedImages extends MagentoAdminCache
      * @param PageFactory $resultPageFactory
      */
     public function __construct(
-        ResizerCacheHelper $resizerCacheHelper,
+        ResizerCache $resizerCache,
         Context $context,
         TypeListInterface $cacheTypeList,
         StateInterface $cacheState,
@@ -44,7 +44,7 @@ class CleanResizedImages extends MagentoAdminCache
         PageFactory $resultPageFactory
     ) {
         parent::__construct($context, $cacheTypeList, $cacheState, $cacheFrontendPool, $resultPageFactory);
-        $this->resizerCacheHelper = $resizerCacheHelper;
+        $this->resizerCache = $resizerCache;
     }
 
     /**
@@ -55,7 +55,7 @@ class CleanResizedImages extends MagentoAdminCache
     public function execute()
     {
         try {
-            $this->resizerCacheHelper->clearResizedImagesCache();
+            $this->resizerCache->clearResizedImagesCache();
             $this->_eventManager->dispatch('staempfli_imageresizer_clean_images_cache_after');
             $this->messageManager->addSuccessMessage(__('The resized images cache was cleaned.'));
         } catch (LocalizedException $e) {

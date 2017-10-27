@@ -6,7 +6,7 @@
  * @author    juan.alonso@staempfli.com
  */
 
-namespace Staempfli\ImageResizer\Helper;
+namespace Staempfli\ImageResizer\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
@@ -69,7 +69,8 @@ class Resizer
         'keepAspectRatio' => true,
         'keepTransparency' => true,
         'keepFrame' => false,
-        'backgroundColor' => null
+        'backgroundColor' => null,
+        'quality' => 85
     ];
     /**
      * @var array
@@ -203,7 +204,7 @@ class Resizer
      * Get sub folder name where the resized image will be saved
      *
      * In order to have unique folders depending on setting, we use the following logic:
-     *      - <width>x<height>_[co]_[ar]_[tr]_[fr]
+     *      - <width>x<height>_[co]_[ar]_[tr]_[fr]_[quality]
      *
      * @return string
      */
@@ -215,7 +216,7 @@ class Resizer
                 $subPath .= "_" . $this->subPathSettingsMapping[$key];
             }
         }
-        return $subPath;
+        return sprintf('%s_%s',$subPath, $this->resizeSettings['quality']);
     }
 
     /**
@@ -289,6 +290,7 @@ class Resizer
         $imageAdapter->keepTransparency($this->resizeSettings['keepTransparency']);
         $imageAdapter->keepFrame($this->resizeSettings['keepFrame']);
         $imageAdapter->backgroundColor($this->resizeSettings['backgroundColor']);
+        $imageAdapter->quality($this->resizeSettings['quality']);
         $imageAdapter->resize($this->width, $this->height);
         $imageAdapter->save($this->getAbsolutePathResized());
         return true;
