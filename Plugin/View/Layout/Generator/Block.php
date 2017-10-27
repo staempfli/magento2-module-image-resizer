@@ -28,7 +28,7 @@ class Block
     }
 
     /**
-     * Add image resizer helper object to all template blocks
+     * Add image resizer object to all template blocks
      *
      * @param MagentoGeneratorBock $subject
      * @param $result
@@ -38,7 +38,7 @@ class Block
     public function afterCreateBlock(MagentoGeneratorBock $subject, $result) //@codingStandardsIgnoreLine
     {
         if (is_a($result, 'Magento\Framework\View\Element\Template')) {
-            $result->addData(['image_resizer_helper' => $this->resizer]);
+            $result->addData(['image_resizer' => $this->resizer]);
         }
         return $result;
     }
