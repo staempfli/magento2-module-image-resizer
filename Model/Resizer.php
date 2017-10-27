@@ -204,7 +204,7 @@ class Resizer
      * Get sub folder name where the resized image will be saved
      *
      * In order to have unique folders depending on setting, we use the following logic:
-     *      - <width>x<height>_[co]_[ar]_[tr]_[fr]
+     *      - <width>x<height>_[co]_[ar]_[tr]_[fr]_[quality]
      *
      * @return string
      */
@@ -216,7 +216,7 @@ class Resizer
                 $subPath .= "_" . $this->subPathSettingsMapping[$key];
             }
         }
-        return $subPath;
+        return sprintf('%s_%s',$subPath, $this->resizeSettings['quality']);
     }
 
     /**
