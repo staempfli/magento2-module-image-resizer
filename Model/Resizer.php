@@ -114,26 +114,37 @@ class Resizer
     }
 
     /**
-     * Resized image and return url
-     * - Return original image url if no success
+     * Resize image
      *
      * @param string $imageUrl
      * @param null|int $width
      * @param null|int $height
      * @param array $resizeSettings
-     * @return bool|string
+     * @return self
      */
-    public function resizeAndGetUrl(string $imageUrl, $width, $height, array $resizeSettings = [])
+    public function resize(string $imageUrl, $width, $height, array $resizeSettings = [])
     {
-        // Set $resultUrl with $fileUrl to return this one in case the resize fails.
-        $resultUrl = $imageUrl;
         $this->initRelativeFilenameFromUrl($imageUrl);
         if (!$this->relativeFilename) {
-            return $resultUrl;
+            return $this;
         }
 
         $this->initSize($width, $height);
         $this->initResizeSettings($resizeSettings);
+
+        return $this;
+    }
+
+    /**
+     * Return url
+     * - Return default value if no success
+     *
+     * @param string $default
+     * @return string
+     */
+    public function getUrl($default = '')
+    {
+        $resultUrl = '';
 
         try {
             // Check if resized image already exists in cache
@@ -150,7 +161,42 @@ class Resizer
             $this->logger->addError("Staempfli_ImageResizer: could not resize image: \n" . $e->getMessage());
         }
 
-        return $resultUrl;
+        return $resultUrl ?: $default;
+    }
+
+    /**
+     * Return relative path of resized image
+     *
+     * @return string
+     */
+    public function getRelativePath()
+    {
+        return $this->getRelativePathResizedImage();
+    }
+
+    /**
+     * Return absolute path of resized image
+     *
+     * @return string
+     */
+    public function getAbsolutePath()
+    {
+        return $this->getAbsolutePathResized();
+    }
+
+    /**
+     * Resize image and return url
+     * - Return original image url if no success
+     *
+     * @param string $imageUrl
+     * @param null|int $width
+     * @param null|int $height
+     * @param array $resizeSettings
+     * @return bool|string
+     */
+    public function resizeAndGetUrl(string $imageUrl, $width, $height, array $resizeSettings = [])
+    {
+        return $this->resize($imageUrl, $width, $height, $resizeSettings)->getUrl($imageUrl);
     }
 
     /**
@@ -216,6 +262,7 @@ class Resizer
                 $subPath .= "_" . $this->subPathSettingsMapping[$key];
             }
         }
+
         return sprintf('%s_%s',$subPath, $this->resizeSettings['quality']);
     }
 
@@ -235,6 +282,7 @@ class Resizer
             $this->getResizeSubFolderName(),
             $pathInfo['basename']
         ];
+
         return implode(DIRECTORY_SEPARATOR, $relativePathParts);
     }
 
@@ -269,6 +317,7 @@ class Resizer
         if ($this->mediaDirectoryRead->isFile($relativePath)) {
             return $this->storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_MEDIA) . $relativePath;
         }
+
         return false;
     }
 
@@ -293,6 +342,7 @@ class Resizer
         $imageAdapter->quality($this->resizeSettings['quality']);
         $imageAdapter->resize($this->width, $this->height);
         $imageAdapter->save($this->getAbsolutePathResized());
+
         return true;
     }
 }
