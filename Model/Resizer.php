@@ -25,7 +25,7 @@ class Resizer
     /**
      * constant IMAGE_RESIZER_CACHE_DIR
      */
-    const IMAGE_RESIZER_CACHE_DIR = self::IMAGE_RESIZER_DIR . DIRECTORY_SEPARATOR . DirectoryList::CACHE;
+    const IMAGE_RESIZER_CACHE_DIR = self::IMAGE_RESIZER_DIR . '/' . DirectoryList::CACHE;
     /**
      * @var imageAdapterFactory
      */
@@ -235,7 +235,7 @@ class Resizer
             $this->getResizeSubFolderName(),
             $pathInfo['basename']
         ];
-        return implode(DIRECTORY_SEPARATOR, $relativePathParts);
+        return implode('/', $relativePathParts);
     }
 
     /**
