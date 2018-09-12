@@ -184,7 +184,11 @@ class Resizer
         $imagePath = parse_url($imageUrl, PHP_URL_PATH);
 
         if (false !== strpos($imagePath, $mediaPath)) {
-            $this->relativeFilename = str_replace($mediaPath, '', $imagePath);
+            if($mediaPath=="/"){
+                $this->relativeFilename = trim($imagePath ,'/' );
+            }else{
+                $this->relativeFilename = str_replace($mediaPath, '', $imagePath);
+            }
         }
     }
 
