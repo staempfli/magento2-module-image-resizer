@@ -132,6 +132,11 @@ class Resizer
             return $resultUrl;
         }
 
+        // Check if image is an animated gif return original gif instead of resized still.
+        if ($this->isAnimatedGif($imageUrl)){
+            return $resultUrl;
+        }
+
         $this->initSize($width, $height);
         $this->initResizeSettings($resizeSettings);
 
@@ -295,4 +300,46 @@ class Resizer
         $imageAdapter->save($this->getAbsolutePathResized());
         return true;
     }
+
+    /**
+     * Detects animated GIF from given file pointer resource or filename.
+     *
+     * @param resource|string $file File pointer resource or filename
+     * @return bool
+     */
+    protected function isAnimatedGif($file)
+    {
+        $fp = null;
+
+        if (is_string($file)) {
+            $fp = fopen($file, "rb");
+        } else {
+            $fp = $file;
+
+            /* Make sure that we are at the beginning of the file */
+            fseek($fp, 0);
+        }
+
+        if (fread($fp, 3) !== "GIF") {
+            fclose($fp);
+
+            return false;
+        }
+
+        $frames = 0;
+
+        while (!feof($fp) && $frames < 2) {
+            if (fread($fp, 1) === "\x00") {
+                /* Some of the animated GIFs do not contain graphic control extension (starts with 21 f9) */
+                if (fread($fp, 1) === "\x21" || fread($fp, 2) === "\x21\xf9") {
+                    $frames++;
+                }
+            }
+        }
+
+        fclose($fp);
+
+        return $frames > 1;
+    }
+
 }
