@@ -309,35 +309,31 @@ class Resizer
      */
     protected function isAnimatedGif($file)
     {
-        $fp = null;
+        $filepointer = null;
 
-        if (is_string($file)) {
-            $fp = fopen($file, "rb");
-        } else {
-            $fp = $file;
+        $filepointer = (is_string($file)) ? fopen($file, "rb") : $file;
 
-            /* Make sure that we are at the beginning of the file */
-            fseek($fp, 0);
-        }
+        /* Make sure that we are at the beginning of the file */
+        fseek($filepointer, 0);
 
-        if (fread($fp, 3) !== "GIF") {
-            fclose($fp);
+        if (fread($filepointer, 3) !== "GIF") {
+            fclose($filepointer);
 
             return false;
         }
 
         $frames = 0;
 
-        while (!feof($fp) && $frames < 2) {
-            if (fread($fp, 1) === "\x00") {
+        while (!feof($filepointer) && $frames < 2) {
+            if (fread($filepointer, 1) === "\x00") {
                 /* Some of the animated GIFs do not contain graphic control extension (starts with 21 f9) */
-                if (fread($fp, 1) === "\x21" || fread($fp, 2) === "\x21\xf9") {
+                if (fread($filepointer, 1) === "\x21" || fread($filepointer, 2) === "\x21\xf9") {
                     $frames++;
                 }
             }
         }
 
-        fclose($fp);
+        fclose($filepointer);
 
         return $frames > 1;
     }
