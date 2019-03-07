@@ -311,10 +311,13 @@ class Resizer
     {
         $filepointer = null;
 
-        $filepointer = (is_string($file)) ? fopen($file, "rb") : $file;
-
-        /* Make sure that we are at the beginning of the file */
-        fseek($filepointer, 0);
+        if (is_string($file)) {
+            $filepointer = fopen($file, "rb");
+        } else {
+            $filepointer = $file;
+            /* Make sure that we are at the beginning of the file */
+            fseek($filepointer, 0);
+        }
 
         if (fread($filepointer, 3) !== "GIF") {
             fclose($filepointer);
