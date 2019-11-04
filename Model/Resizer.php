@@ -125,21 +125,24 @@ class Resizer
      */
     public function resizeAndGetUrl(string $imageUrl, $width, $height, array $resizeSettings = [])
     {
-        // Set $resultUrl with $fileUrl to return this one in case the resize fails.
-        $resultUrl = $imageUrl;
-        $this->initRelativeFilenameFromUrl($imageUrl);
-        if (!$this->relativeFilename) {
-            return $resultUrl;
+        try {
+            // Set $resultUrl with $fileUrl to return this one in case the resize fails.
+            $resultUrl = $imageUrl;
+            $this->initRelativeFilenameFromUrl($imageUrl);
+            if (!$this->relativeFilename) {
+                return $resultUrl;
+            }
+
+            // Check if image is an animated gif return original gif instead of resized still.
+            if ($this->isAnimatedGif($imageUrl)){
+                return $resultUrl;
+            }
+
+            $this->initSize($width, $height);
+            $this->initResizeSettings($resizeSettings);
+        } catch (\Exception $e) {
+            $this->logger->addError("Staempfli_ImageResizer: could not find image: \n" . $e->getMessage());
         }
-
-        // Check if image is an animated gif return original gif instead of resized still.
-        if ($this->isAnimatedGif($imageUrl)){
-            return $resultUrl;
-        }
-
-        $this->initSize($width, $height);
-        $this->initResizeSettings($resizeSettings);
-
         try {
             // Check if resized image already exists in cache
             $resizedUrl = $this->getResizedImageUrl();
