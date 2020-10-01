@@ -11,13 +11,13 @@ $ composer require "staempfli/magento2-module-image-resizer":"~2.0"
 
 ## Usage
 
-`imageResizer` is automatically available in all frontend Blocks. 
+`imageResizer` is automatically available in all frontend Blocks.
 You can resize your images just calling a method:
 
 ```php
 /** @var \Staempfli\ImageResizer\Model\Resizer $imageResizer */
 $imageResizer = $block->getImageResizer();
-$resizedImageUrl = $imageResizer->resizeAndGetUrl(<originalImageUrl>, $width, $height, [$resizeSettings]); 
+$resizedImageUrl = $imageResizer->resizeAndGetUrl(<originalImageUrl>, $width, $height, [$resizeSettings]);
 ```
 
 You can do that directly on the .phtml or in your custom Block.
@@ -34,3 +34,15 @@ If you need to, you can clear the resized images cache on the Admin Cache Manage
 
 - PHP >= 7.0.*
 - Magento >= 2.1.*
+
+## Resize Settings
+
+The folowing is a list of the resize settings that can be set:
+| Name | Default | Type |
+| --- | --- | --- |
+| constrainOnly | true | Boolean |
+| keepAspectRatio | true | Boolean |
+| keepTransparency | true | Boolean |
+| keepFrame | false | Boolean |
+| backgroundColor | null | Array with RGB values ([255,255,255]) |
+| quality | 85 | Number 1-100 |
